@@ -1,4 +1,4 @@
-import {Button, Container, Navbar, Modal} from 'react-bootstrap';
+import { Button, Container, Navbar, Modal } from 'react-bootstrap';
 import { useState, useContext } from 'react';
 import { CartContext } from "../CartContext";
 import CartProduct from './CartProduct';
@@ -16,11 +16,29 @@ function NavbarComponent() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({items: cart.items})
+            body: JSON.stringify({ items: cart.items })
         }).then((response) => {
             return response.json();
         }).then((response) => {
-            if(response.url) {
+            if (response.url) {
+                window.location.assign(response.url); // Forwarding user to Stripe
+            }
+        });
+    }
+
+    const manageBilling = async () => {
+        await fetch('http://localhost:4000/create-customer-portal-session', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ customer_id: "cus_NpOdr1RzvHVS11" })
+        }).then((response) => {
+            console.log(response)
+            return response.json();
+        }).then((response) => {
+            if (response.url) {
+                console.log(response.url)
                 window.location.assign(response.url); // Forwarding user to Stripe
             }
         });
@@ -45,7 +63,7 @@ function NavbarComponent() {
                     {productsCount > 0 ?
                         <>
                             <p>Items in your cart:</p>
-                            {cart.items.map( (currentProduct, idx) => (
+                            {cart.items.map((currentProduct, idx) => (
                                 <CartProduct key={idx} id={currentProduct.id} quantity={currentProduct.quantity}></CartProduct>
                             ))}
 
@@ -54,8 +72,14 @@ function NavbarComponent() {
                             <Button variant="success" onClick={checkout}>
                                 Purchase items!
                             </Button>
+                            <Button variant="success" onClick={manageBilling}>
+                                Manage billing
+                            </Button>
+                            {/*<form method="POST" action="/create-customer-portal-session">
+                                <button type="submit">Manage billing</button>
+                            </form>*/}
                         </>
-                    :
+                        :
                         <h1>There are no items in your cart!</h1>
                     }
                 </Modal.Body>
