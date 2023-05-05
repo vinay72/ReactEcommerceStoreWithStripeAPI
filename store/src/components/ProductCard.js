@@ -12,7 +12,7 @@ function ProductCard(props) { // props.product is the product we are selling
             <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
                 <Card.Text>${product.price}</Card.Text>
-                {productQuantity > 0 ?
+                { productQuantity > 0 ?
                     <>
                         <Form as={Row}>
                             <Form.Label column="true" sm="6">In Cart: {productQuantity}</Form.Label>
@@ -21,7 +21,6 @@ function ProductCard(props) { // props.product is the product we are selling
                                 <Button sm="6" onClick={() => cart.removeOneFromCart(product.id)} className="mx-2">-</Button>
                             </Col>
                         </Form>
-
                         <Button variant="danger" onClick={() => cart.deleteFromCart(product.id)} className="my-2">Remove from cart</Button>
                     </>
                     :

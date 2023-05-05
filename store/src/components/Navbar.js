@@ -27,21 +27,50 @@ function NavbarComponent() {
     }
 
     const manageBilling = async () => {
-        await fetch('http://localhost:4000/create-customer-portal-session', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ customer_id: "cus_NpOdr1RzvHVS11" })
-        }).then((response) => {
-            console.log(response)
-            return response.json();
-        }).then((response) => {
-            if (response.url) {
-                console.log(response.url)
-                window.location.assign(response.url); // Forwarding user to Stripe
-            }
-        });
+        
+        // await fetch('http://localhost:4000/create-customer-portal-session', {
+        //     method: "POST",
+        //     // mode: "no-cors",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Access-Control-Allow-Origin' : "http://localhost:3000"
+        //     },
+        //     body: JSON.stringify({ customer_id: "cus_NpOdr1RzvHVS11" })
+        // }).then((response) => {
+        //     console.log(response)
+        //     return response.json();
+        // }).then((response) => {
+        //     if (response.url) {
+        //         console.log(response.url)
+        //         window.location.assign(response.url); // Forwarding user to Stripe
+        //     }
+        // });
+
+        const url = 'http://localhost:4000/create-customer-portal-session';
+        
+    
+        // const queryParams = new URLSearchParams().toString();
+        const fetchUrl = url;
+    
+       await fetch(fetchUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Add any other headers here as needed
+          },
+          body: JSON.stringify({ customer_id: "cus_NpOdr1RzvHVS11" })
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Process the response data here
+            
+            console.log('customer data',data);
+            // setCustomerData(data)
+          })
+          .catch(error => {
+            // Handle any errors here
+            console.error('error',error);
+          });
     }
 
     const productsCount = cart.items.reduce((sum, product) => sum + product.quantity, 0);
